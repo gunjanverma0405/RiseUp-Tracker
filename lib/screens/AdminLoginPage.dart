@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:riseuptracker/widgets/custom_textfield.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+import '../utils/routes.dart';
+
+class AdminLoginPage extends StatefulWidget {
+  const AdminLoginPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<AdminLoginPage> createState() => _AdminLoginPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _AdminLoginPageState extends State<AdminLoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -31,44 +34,46 @@ class _SignUpPageState extends State<SignUpPage> {
           },
         ),
       ),
+
       body: Material(
         color: Colors.white,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(
-                height: 50.0,
-              ),
-              Image.asset(
-                "assets/images/signup_image.png",
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(
-                height: 25.0,
-              ),
-              const Text(
-                "Welcome",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurpleAccent,
+              Padding(
+                padding: EdgeInsets.only(bottom: 50,top: 40),
+                  child: Image.asset(
+                    'assets/images/Logo2.png',
+                    width: 250,
                 ),
               ),
-              const SizedBox(
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: const Text(
+                  "Admin Login",
+                  style: TextStyle(
+                    fontSize: 33,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                ),
+              ),
+
+          const SizedBox(
                 height: 25.0,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 10.0,
+                  vertical: 15.0,
                   horizontal: 32.0,
                 ),
                 child: Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
                       child: CustomTextField(
                         controller: emailController,
-                        hintText: 'Enter your email',
+                        hintText: 'Enter your username',
                         obscureText: false,
                       ),
                     ),
@@ -76,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 20,
                     ),
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
                       child: CustomTextField(
                         controller: passwordController,
                         hintText: 'Enter your password',
@@ -96,22 +101,25 @@ class _SignUpPageState extends State<SignUpPage> {
                           height: 50,
                           alignment: Alignment.center,
                           child: const Text(
-                            "Sign Up",
+                            "Login",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 20,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
+                    const SizedBox(
+                      height: 50.0,
+                    ),
             ],
           ),
         ),
+      ],
+      ),
+      ),
       ),
     );
   }

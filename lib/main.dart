@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:riseuptracker/screens/login_page.dart';
+import 'package:riseuptracker/screens/AdminLoginPage.dart';
 import 'package:riseuptracker/screens/signup_page.dart';
+import 'package:riseuptracker/screens/splash.dart';
 import 'package:riseuptracker/utils/routes.dart';
 
 void main() {
@@ -18,10 +19,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      initialRoute: MyRoutes.loginRoute,
+      initialRoute: '/',
       routes: {
-        "/": (context) => const LoginPage(),
-        MyRoutes.loginRoute: (context) => const LoginPage(),
+        "/": (context) => const splash(),
+        MyRoutes.loginRoute: (context) => const AdminLoginPage(),
         MyRoutes.signupRoute: (context) => const SignUpPage(),
       },
     );
