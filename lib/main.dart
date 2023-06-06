@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => const splash(),
         MyRoutes.loginRoute: (context) => const AdminLoginPage(),
-        MyRoutes.signupRoute: (context) => const SignUpPage(),
+        MyRoutes.signupRoute: (context) => const RegistrationForm(),
       },
     );
   }
