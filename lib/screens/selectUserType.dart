@@ -17,15 +17,7 @@ class _UserTypePageState extends State<UserTypePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(int.parse('FFF6DC31', radix: 16)),
-        title: Text(
-          'TINY MIRACLES',
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            color: Colors.black,
-          ),
-        ),
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),

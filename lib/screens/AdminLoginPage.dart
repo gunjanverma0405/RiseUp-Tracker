@@ -73,7 +73,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       margin: const EdgeInsets.symmetric(horizontal: 25),
                       child: CustomTextField(
                         controller: emailController,
-                        hintText: 'Enter your username',
+                        hintText: 'Enter your user ID',
                         obscureText: false,
                       ),
                     ),
