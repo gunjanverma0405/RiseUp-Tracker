@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'AdminLoginPage.dart';
 import 'attendeeLoginPage.dart';
 
@@ -17,15 +16,6 @@ class _UserTypePageState extends State<UserTypePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(int.parse('FFF6DC31', radix: 16)),
-        title: Text(
-          'TINY MIRACLES',
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            color: Colors.black,
-          ),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
@@ -148,7 +138,6 @@ class _UserTypePageState extends State<UserTypePage> {
           backgroundColor: Colors.blue,
         ),
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

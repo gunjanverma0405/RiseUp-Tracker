@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:riseuptracker/widgets/custom_textfield.dart';
-
-import '../utils/routes.dart';
 
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({super.key});
@@ -34,17 +31,16 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
           },
         ),
       ),
-
       body: Material(
         color: Colors.white,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: 50,top: 40),
-                  child: Image.asset(
-                    'assets/images/Logo2.png',
-                    width: 250,
+                padding: EdgeInsets.only(bottom: 50, top: 40),
+                child: Image.asset(
+                  'assets/images/Logo2.png',
+                  width: 250,
                 ),
               ),
               Padding(
@@ -58,8 +54,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   ),
                 ),
               ),
-
-          const SizedBox(
+              const SizedBox(
                 height: 25.0,
               ),
               Padding(
@@ -73,7 +68,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       margin: const EdgeInsets.symmetric(horizontal: 25),
                       child: CustomTextField(
                         controller: emailController,
-                        hintText: 'Enter your username',
+                        hintText: 'Enter your user ID',
                         obscureText: false,
                       ),
                     ),
@@ -114,12 +109,12 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     const SizedBox(
                       height: 50.0,
                     ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-      ],
-      ),
-      ),
       ),
     );
   }

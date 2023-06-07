@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>323259046861-qlomm5ald5cqr647go3ro3k7qlscpm9g.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.323259046861-qlomm5ald5cqr647go3ro3k7qlscpm9g</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA7RmYMCMsa_UcdNP3G6WDAeZm2Q5SUnAg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>323259046861</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.riseuptracker</string>
+	<key>PROJECT_ID</key>
+	<string>riseuptracker</string>
+	<key>STORAGE_BUCKET</key>
+	<string>riseuptracker.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:323259046861:ios:c0e776be10d4458b718284</string>
+</dict>
+</plist>
