@@ -136,7 +136,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter your phone number';
-                          } else if (value.length != 112) {
+                          } else if (value.length != 11) {
                             return 'Please enter a valid phone number';
                           } else {
                             phoneNumber = value;
