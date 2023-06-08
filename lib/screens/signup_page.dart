@@ -91,7 +91,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         controller: _dobController,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.calendar_today),
-                          labelText: "Enter Date of Birth",
+                          labelText: "Enter your Date of Birth",
                         ),
                         readOnly: true,
                         onTap: () async {

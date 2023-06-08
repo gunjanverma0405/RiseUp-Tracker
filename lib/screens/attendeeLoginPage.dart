@@ -182,12 +182,12 @@ class _AttendeeLoginPageState extends State<AttendeeLoginPage> {
                               Image(
                                   image: AssetImage(
                                       "assets/images/google_logo.png"),
-                                  height: 35.0),
-                              SizedBox(width: 30.0),
+                                  height: 40.0),
+                              SizedBox(width: 25.0),
                               Text(
-                                'Sign in with Google',
+                                'Sign up with Google',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.deepPurpleAccent,
                                 ),
