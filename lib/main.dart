@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:riseuptracker/database/MongoDatabase.dart';
 import 'package:riseuptracker/screens/AdminLoginPage.dart';
+import 'package:riseuptracker/screens/qrcode/GenerateQRcode.dart';
 import 'package:riseuptracker/screens/signup_page.dart';
 import 'package:riseuptracker/screens/splash.dart';
 import 'package:riseuptracker/utils/routes.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        "/": (context) => const splash(),
+        "/": (context) => GeneratePage(),
+        // "/": (context) => const splash(),
         MyRoutes.loginRoute: (context) => const AdminLoginPage(),
         MyRoutes.signupRoute: (context) => const RegistrationForm(),
       },
