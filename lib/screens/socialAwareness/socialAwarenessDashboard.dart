@@ -7,7 +7,8 @@ import 'attendanceLineChart.dart';
 
 class socialAwarenessDashboard extends StatefulWidget {
   @override
-  _socialAwarenessDashboardState createState() => _socialAwarenessDashboardState();
+  _socialAwarenessDashboardState createState() =>
+      _socialAwarenessDashboardState();
 }
 
 class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
@@ -47,11 +48,13 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
           ),
         ],
       ),
-      body: SingleChildScrollView( // Enable scrolling
+      body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Column(
             children: [
+
+              SizedBox(height: 16.0),
               Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
@@ -128,6 +131,25 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                 ),
               ),
               SizedBox(height: 12.0),
+              Align(
+                alignment: Alignment.topRight,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    // Implement the logic to navigate to the create session screen
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text('Create New Session'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blueAccent,
+                    onPrimary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 12.0),
               Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
@@ -160,18 +182,19 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                               fontSize: 16.0,
                             ),
                           ),
-                          subtitle: Text('Date: ${session.sessionDate}',
+                          subtitle: Text(
+                            'Date: ${session.sessionDate}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 12.0,
-                            ),),
+                            ),
+                          ),
                         ),
                       ),
                     );
                   },
                 ),
               ),
-
             ],
           ),
         ),

@@ -94,13 +94,6 @@ class MainDashboard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Darkened image as the background
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25.0),
-
-              ),
-            ),
             // Icon and text in the middle
             Center(
               child: Column(
