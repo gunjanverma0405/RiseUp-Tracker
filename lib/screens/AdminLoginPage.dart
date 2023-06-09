@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:riseuptracker/screens/MainDashboard.dart';
 import 'package:riseuptracker/screens/socialAwareness/socialAwarenessDashboard.dart';
 import 'package:riseuptracker/widgets/custom_textfield.dart';
 
@@ -111,7 +112,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                               // Perform login logic here
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => socialAwarenessDashboard()),
+                                MaterialPageRoute(builder: (context) => MainDashboard()),
                               );
                               // Navigate to the admin dashboard or perform required actions
                             }

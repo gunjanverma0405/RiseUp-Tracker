@@ -28,7 +28,7 @@ class AttendanceLineChart extends StatelessWidget {
               height: 250,// Adjust the width as needed
               child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(
-                  title: AxisTitle(text: 'Sessions'),
+                  title: AxisTitle(text: 'Session ID'),
                 ),
                 primaryYAxis: NumericAxis(
                   title: AxisTitle(text: 'Number of Attendees'),

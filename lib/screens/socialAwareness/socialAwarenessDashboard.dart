@@ -14,16 +14,42 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
   bool showGenderChart = false;
   bool showAgeChart = false;
 
+  List<SessionDetails> sessionDetails = [
+    SessionDetails(
+      sessionId: '1',
+      sessionTitle: 'Raising Awareness on Mental Health',
+      sessionDate: '06-10-2022',
+    ),
+    SessionDetails(
+      sessionId: '4',
+      sessionTitle: 'Fighting Online Harassment',
+      sessionDate: '06-10-2022',
+    ),
+    SessionDetails(
+      sessionId: '7',
+      sessionTitle: 'Protecting Our Environment',
+      sessionDate: '06-10-2022',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
         title: Text('Social Awareness'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.person),
+            color: Colors.white,
+            iconSize: 40,
+            onPressed: null,
+          ),
+        ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView( // Enable scrolling
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
           child: Column(
             children: [
               Card(
@@ -101,6 +127,51 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                   ],
                 ),
               ),
+              SizedBox(height: 12.0),
+              Card(
+                elevation: 4.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: sessionDetails.length,
+                  itemBuilder: (context, index) {
+                    SessionDetails session = sessionDetails[index];
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigate to the corresponding screen on session click
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => SessionScreen(session)),
+                        // );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(color: Colors.grey)),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            'Session ${session.sessionId}: ${session.sessionTitle}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          subtitle: Text('Date: ${session.sessionDate}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12.0,
+                            ),),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
             ],
           ),
         ),
@@ -109,3 +180,14 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
   }
 }
 
+class SessionDetails {
+  final String sessionId;
+  final String sessionTitle;
+  final String sessionDate;
+
+  SessionDetails({
+    required this.sessionId,
+    required this.sessionTitle,
+    required this.sessionDate,
+  });
+}
