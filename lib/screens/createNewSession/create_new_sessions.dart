@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 import 'package:riseuptracker/database/db_connects.dart';
+import 'package:riseuptracker/screens/createNewSession/updateSessionWithQRCodeImage.dart';
 
 import '../qrcode/GenerateQRcode.dart';
 
@@ -107,12 +108,18 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
                     final db = await mongo_dart.Db.create(dbURl);
                     await db.open();
                     // Insert the data into the collection
-                    await db.collection("Sessions").insert({
-                      'Title': sessionTitle,
-                      'Date' : sessionDate,
+                    final result = await db.collection("Session").insert({
+                      'Title':sessionTitle,
+                      'Date': sessionDate,
                       'Location': sessionLocation,
-                      'Tag' : sessionTag
+                      'Tag': sessionTag
                     });
+
+                    //final currId = result['_id'].toHexString();
+                    //final qrCodeImage = generateQRCode(currId);
+                    await db.close();
+                    //updateSessionWithQRCodeImage(sessionId, qrCodeImage);
+
                     final snackBar = SnackBar(
                       content: const Text('Session Added!!'),
                       duration: const Duration(seconds: 3),
@@ -126,16 +133,6 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(snackBar);
 
-                    //final insertedId = result['_id'].toHexString();
-                    final objectID = mongo_dart.ObjectId();
-                    final id = objectID.toHexString();
-                    await db.close();
-                    /*Navigator.push(
-                     context,
-                      MaterialPageRoute(
-                        builder: (context) => GenerateQRcode(sessionID: id),
-                      ),
-                    );*/
                     // Implement the logic to save the session details
                     // You can use the sessionTitle, sessionDate, sessionLocation, and sessionTag variables
                   }else {

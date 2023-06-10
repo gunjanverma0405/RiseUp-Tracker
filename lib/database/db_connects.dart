@@ -5,5 +5,5 @@ const collectAttendee = "Attendee";
 const collectAdmin = "Admin";
 const collectMedical = "Medical";
 const collectChildEd = "Child Education";
-const collectSession = "Sessions";
+const collectSession = "Session";
 const collectAttendance = "Attendance";

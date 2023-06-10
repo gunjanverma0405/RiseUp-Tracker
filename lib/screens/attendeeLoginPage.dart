@@ -3,6 +3,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 import 'package:riseuptracker/services/firebase_auth_methods.dart';
 import 'package:riseuptracker/widgets/custom_textfield.dart';
 import '../database/db_connects.dart';
+import 'package:riseuptracker/screens/attendeeDashboard.dart';
 import '../utils/routes.dart';
 
 class AttendeeLoginPage extends StatefulWidget {
@@ -136,7 +137,13 @@ class _AttendeeLoginPageState extends State<AttendeeLoginPage> {
                                 content: const Text('Login successful'),
                                 actions: <Widget>[
                                   TextButton(
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () {
+                                      Navigator.pop(context); // Close the dialog
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => SessionPage()),
+                                      ); // Navigate to the main dashboard
+                                    },
                                     child: const Text('OK'),
                                   ),
                                 ],

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:riseuptracker/database/MongoDatabase.dart';
 import 'package:riseuptracker/screens/AdminLoginPage.dart';
 import 'package:riseuptracker/screens/createNewSession/create_new_sessions.dart';
+import 'package:riseuptracker/screens/attendeeDashboard.dart';
 import 'package:riseuptracker/screens/qrcode/GenerateQRcode.dart';
 import 'package:riseuptracker/screens/signup_page.dart';
 import 'package:riseuptracker/screens/splash.dart';
 import 'package:riseuptracker/utils/routes.dart';
 import 'firebase_options.dart';
+import 'screens/qrcode/QRScanner.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +33,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
+
         //"/": (context) => GenerateQRcode(sessionId: '11111'),
-         "/": (context) => splash(),
+         //"/": (context) => splash(),
+
+        //"/": (context) => SessionPage(),
+          "/": (context) => const splash(),
+
         MyRoutes.loginRoute: (context) => const AdminLoginPage(),
         MyRoutes.signupRoute: (context) => const RegistrationForm(),
       },
