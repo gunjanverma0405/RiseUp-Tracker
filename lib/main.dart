@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:riseuptracker/database/MongoDatabase.dart';
 import 'package:riseuptracker/screens/AdminLoginPage.dart';
+import 'package:riseuptracker/screens/createNewSession/create_new_sessions.dart';
 import 'package:riseuptracker/screens/qrcode/GenerateQRcode.dart';
 import 'package:riseuptracker/screens/signup_page.dart';
 import 'package:riseuptracker/screens/splash.dart';
@@ -30,8 +31,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        //"/": (context) => GeneratePage(),
-         "/": (context) => const splash(),
+        //"/": (context) => GenerateQRcode(sessionId: '11111'),
+         "/": (context) => splash(),
         MyRoutes.loginRoute: (context) => const AdminLoginPage(),
         MyRoutes.signupRoute: (context) => const RegistrationForm(),
       },

@@ -52,7 +52,7 @@ class GeneratePageState extends State<GeneratePage> {
                     const EdgeInsets.all(15.0),
                   ),
                   foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
+                  MaterialStateProperty.all<Color>(Colors.blue),
                   shape: MaterialStateProperty.all<OutlinedBorder>(
                     RoundedRectangleBorder(
                       side: const BorderSide(color: Colors.blue, width: 3.0),
