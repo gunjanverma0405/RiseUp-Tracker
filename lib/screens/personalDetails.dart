@@ -13,14 +13,11 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   String educationStatus = "";
   int familyMembers = 0;
   String aadharNumber = "";
-  String _bloodGroup = "";
-  String chronicDisease = "";
-  String lastMedicalCheckup = "";
-  String educationStatusOfChildren = "";
+  String bloodGroup = "";
   bool hasBankAccount = false;
+  bool hasPanCard = false;
   String panCardNumber = "";
   bool hasRationCard = false;
-  String sessionOfInterest = "";
   String employmentStatus = "";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -123,162 +120,91 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   }
                   return null;
                 },
-                onChanged:                                                                                                                                   (value) {
+                onChanged: (value) {
                   setState(() {
-                    _bloodGroup = value!;
+                    bloodGroup = value!;
                   });
                 },
               ),
               SizedBox(
                 height: 10,
               ),
-              // TextFormField(
-              //   decoration: InputDecoration(labelText: 'Blood Group'),
-              //   validator: (value) {
-              //     if (value.isEmpty) {
-              //       return 'Please enter your blood group';
-              //     }
-              //     return null;
-              //   },
-              //   onSaved: (value) {
-              //     bloodGroup = value;
-              //   },
-              // ),
-              // DropdownButtonFormField<String>(
-              //   decoration: InputDecoration(labelText: 'Chronic Disease'),
-              //   items: <String>[
-              //     'None',
-              //     'Asthma',
-              //     'Diabetes',
-              //     'Heart Disease',
-              //     'Other'
-              //   ].map((String value) {
-              //     return DropdownMenuItem<String>(
-              //       value: value,
-              //       child: Text(value),
-              //     );
-              //   }).toList(),
-              //   validator: (value) {
-              //     if (value == null) {
-              //       return 'Please select your chronic disease';
-              //     }
-              //     return null;
-              //   },
-              //   onChanged: (value) {
-              //     setState(() {
-              //       chronicDisease = value;
-              //     });
-              //   },
-              // ),
-              // TextFormField(
-              //   decoration: InputDecoration(
-              //       labelText: 'Last Medical Checkup / Doctor Visit'),
-              //   validator: (value) {
-              //     if (value.isEmpty) {
-              //       return 'Please enter your last medical checkup/doctor visit date';
-              //     }
-              //     return null;
-              //   },
-              //   onSaved: (value) {
-              //     lastMedicalCheckup = value;
-              //   },
-              // ),
-              // TextFormField(
-              //   decoration:
-              //       InputDecoration(labelText: 'Education Status of Children'),
-              //   validator: (value) {
-              //     if (value.isEmpty) {
-              //       return 'Please enter the education status of your children';
-              //     }
-              //     return null;
-              //   },
-              //   onSaved: (value) {
-              //     educationStatusOfChildren = value;
-              //   },
-              // ),
-              // SwitchListTile(
-              //   title: Text('Bank Account'),
-              //   value: hasBankAccount,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       hasBankAccount = value;
-              //     });
-              //   },
-              // ),
-              // if (hasBankAccount == true)
-              //   TextFormField(
-              //     decoration: InputDecoration(labelText: 'PAN Card Number'),
-              //     validator: (value) {
-              //       if (value.isEmpty) {
-              //         return 'Please enter your PAN card number';
-              //       }
-              //       return null;
-              //     },
-              //     onSaved: (value) {
-              //       panCardNumber = value;
-              //     },
-              //   ),
-              // SwitchListTile(
-              //   title: Text('Ration Card'),
-              //   value: hasRationCard,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       hasRationCard = value;
-              //     });
-              //   },
-              // ),
-              // DropdownButtonFormField<String>(
-              //   decoration: InputDecoration(labelText: 'Sessions of Interest'),
-              //   items: <String>['Fitness', 'Cooking', 'Art', 'Music', 'Other']
-              //       .map((String value) {
-              //     return DropdownMenuItem<String>(
-              //       value: value,
-              //       child: Text(value),
-              //     );
-              //   }).toList(),
-              //   validator: (value) {
-              //     if (value == null) {
-              //       return 'Please select your session of interest';
-              //     }
-              //     return null;
-              //   },
-              //   onChanged: (value) {
-              //     setState(() {
-              //       sessionOfInterest = value;
-              //     });
-              //   },
-              // ),
-              // DropdownButtonFormField<String>(
-              //   decoration: InputDecoration(labelText: 'Employment Status'),
-              //   items: <String>['Employed', 'Unemployed', 'Self-employed']
-              //       .map((String value) {
-              //     return DropdownMenuItem<String>(
-              //       value: value,
-              //       child: Text(value),
-              //     );
-              //   }).toList(),
-              //   validator: (value) {
-              //     if (value == null) {
-              //       return 'Please select your employment status';
-              //     }
-              //     return null;
-              //   },
-              //   onChanged: (value) {
-              //     setState(() {
-              //       employmentStatus = value;
-              //     });
-              //   },
-              // ),
-              // SizedBox(height: 16.0),
-              // RaisedButton(
-              //   onPressed: () {
-              //     if (_formKey.currentState.validate()) {
-              //       _formKey.currentState.save();
-              //       // Perform form submission here
-              //     }
-              //   },
-              //   child: Text('Submit'),
-              // ),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(labelText: 'Employment Status'),
+                items: <String>[
+                  'Employed',
+                  'Unemployed',
+                  'Self-employed',
+                  'Student'
+                ].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select your employment status';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  setState(() {
+                    employmentStatus = value!;
+                  });
+                },
+              ),
+              SwitchListTile(
+                title: Text('Do you have Bank Account?'),
+                value: hasBankAccount,
+                onChanged: (value) {
+                  setState(() {
+                    hasBankAccount = value;
+                  });
+                },
+              ),
+              SwitchListTile(
+                title: Text('Do you have PAN Card?'),
+                value: hasPanCard,
+                onChanged: (value) {
+                  setState(() {
+                    hasPanCard = value;
+                  });
+                },
+              ),
+              if (hasPanCard == true)
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'PAN Card Number'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your PAN card number';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    panCardNumber = value!;
+                  },
+                ),
+              SwitchListTile(
+                title: Text('Do you have Ration Card?'),
+                value: hasRationCard,
+                onChanged: (value) {
+                  setState(() {
+                    hasRationCard = value;
+                  });
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                  }
+                },
+                child: Text('Submit'),
+              ),
             ],
           ),
         ),
