@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../createNewSession/create_new_sessions.dart';
 import 'DemographicPieChart.dart';
 import 'RatingBarGraph.dart';
 import 'attendanceLineChart.dart';
@@ -135,8 +136,12 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                 alignment: Alignment.topRight,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    // Implement the logic to navigate to the create session screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateNewSessionPage(tileName: "Social Awareness",)),
+                    );
                   },
+
                   icon: Icon(Icons.add),
                   label: Text('Create New Session'),
                   style: ElevatedButton.styleFrom(

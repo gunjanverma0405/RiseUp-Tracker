@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
+import 'package:riseuptracker/database/db_connects.dart';
 import 'package:riseuptracker/screens/MainDashboard.dart';
 import 'package:riseuptracker/screens/socialAwareness/socialAwarenessDashboard.dart';
 import 'package:riseuptracker/widgets/custom_textfield.dart';
@@ -11,14 +13,14 @@ class AdminLoginPage extends StatefulWidget {
 }
 
 class _AdminLoginPageState extends State<AdminLoginPage> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
-    emailController.dispose();
+    phoneController.dispose();
     passwordController.dispose();
   }
 
@@ -72,11 +74,11 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 25),
                         child: TextFormField(
-                          controller: emailController,
-                          decoration: const InputDecoration(labelText: 'Enter userID'),
+                          controller: phoneController,
+                          decoration: const InputDecoration(labelText: 'Enter phone no.'),
                           obscureText: false,
                           validator: (value) {
-                            if (value!.isEmpty || value != "admin") {
+                            if (value!.isEmpty) {
                               return 'Please enter a valid userID';
                             }
                             return null;
@@ -93,7 +95,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                           decoration: const InputDecoration(labelText: 'Enter password'),
                           obscureText: true,
                           validator: (value) {
-                            if (value!.isEmpty || value != "12345") {
+                            if (value!.isEmpty ) {
                               return 'Please enter a valid password';
                             }
                             return null;
@@ -107,7 +109,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         color: Colors.deepPurpleAccent,
                         borderRadius: BorderRadius.circular(50),
                         child: InkWell(
-                          onTap: () {
+                          /*onTap: () {
                             if (_formKey.currentState!.validate()) {
                               // Perform login logic here
                               Navigator.push(
@@ -116,7 +118,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                               );
                               // Navigate to the admin dashboard or perform required actions
                             }
-                          },
+                          },*/
                           child: AnimatedContainer(
                             duration: const Duration(seconds: 1),
                             width: 250,
@@ -131,6 +133,70 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                               ),
                             ),
                           ),
+                          // ------------------------------- connecting
+                          onTap: () async {
+                            final phoneNo = phoneController.text;
+                            final password = passwordController.text;
+
+                            // MongoDB connection setup
+                            final db = await mongo_dart.Db.create(dbURl);
+                            await db.open();
+
+                            final collection = await db.collection('Admin');
+
+                            // Query for attendee with matching phone_no and password
+                            final query = mongo_dart.where
+                                .eq('phone', phoneNo)
+                                .eq('Password', password);
+
+                            final attendees = await collection.find(query).toList();
+
+                            if (attendees.isNotEmpty) {
+                              // Successful login
+                              // Close the MongoDB connection
+                              await db.close();
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Login'),
+                                  content: const Text('Login successful'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context); // Close the dialog
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => MainDashboard()),
+                                        ); // Navigate to the main dashboard
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              // Invalid credentials
+                              // Close the MongoDB connection
+                              await db.close();
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Login'),
+                                  content: const Text('Invalid credentials'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+
+// -------------------------------------------------------- mongo done
                         ),
                       ),
                       const SizedBox(

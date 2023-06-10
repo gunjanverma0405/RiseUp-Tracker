@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 import 'package:riseuptracker/services/firebase_auth_methods.dart';
 import 'package:riseuptracker/widgets/custom_textfield.dart';
+import '../database/db_connects.dart';
 import '../utils/routes.dart';
 
 class AttendeeLoginPage extends StatefulWidget {
@@ -11,13 +13,13 @@ class AttendeeLoginPage extends StatefulWidget {
 }
 
 class _AttendeeLoginPageState extends State<AttendeeLoginPage> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    emailController.dispose();
+    phoneController.dispose();
     passwordController.dispose();
   }
 
@@ -69,7 +71,7 @@ class _AttendeeLoginPageState extends State<AttendeeLoginPage> {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: CustomTextField(
-                        controller: emailController,
+                        controller: phoneController,
                         hintText: 'Enter your phone no.',
                         obscureText: false,
                       ),
@@ -106,6 +108,61 @@ class _AttendeeLoginPageState extends State<AttendeeLoginPage> {
                             ),
                           ),
                         ),
+                        // ------------------------------- connecting
+                        onTap: () async {
+                          final phoneNo = phoneController.text;
+                          final password = passwordController.text;
+
+                          // MongoDB connection setup
+                          final db = await mongo_dart.Db.create(dbURl);
+                          await db.open();
+
+                          final collection = await db.collection('Attendee');
+
+                          // Query for attendee with matching phone_no and password
+                          final query = mongo_dart.where
+                              .eq('Phone_no', phoneNo)
+                              .eq('password', password);
+
+                          final attendees = await collection.find(query).toList();
+
+                          if (attendees.isNotEmpty) {
+                            // Successful login
+                            // Proceed with navigation or other logic
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Login'),
+                                content: const Text('Login successful'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            // Invalid credentials
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Login'),
+                                content: const Text('Invalid credentials'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+
+                          // Close the MongoDB connection
+                          await db.close();
+                        },
+// -------------------------------------------------------- mongo done
                       ),
                     ),
                     const SizedBox(

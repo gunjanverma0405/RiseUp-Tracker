@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
+
+
+import '../database/db_connects.dart';
+
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({Key? key}) : super(key: key);
@@ -18,12 +23,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final TextEditingController _passwordController = TextEditingController();
 
   @override
-  void dispose() {
-    _nameController.dispose();
-    _dobController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  //void dispose() {
+  //  _nameController.dispose();
+  //  _dobController.dispose();
+  //  _passwordController.dispose();
+  //  super.dispose();
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -178,23 +183,45 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              final snackBar = SnackBar(
-                                content: const Text('Registration successful!'),
-                                duration: const Duration(seconds: 3),
-                                action: SnackBarAction(
-                                  textColor: Colors.white,
-                                  label: 'Dismiss',
-                                  onPressed: () {},
-                                ),
-                                backgroundColor: Colors.blue,
-                              );
 
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-                          },
+    String name = _nameController.text;
+    String dob = _dobController.text;
+    String password = _passwordController.text;
+
+    // Database connection setup
+    //final db = D('mongodb://$dbUsername:$dbPassword@$dbHost:$dbPort/$dbName');
+    //final db = Db.create(dbURl);
+    final db = await mongo_dart.Db.create(dbURl);
+    await db.open();
+
+
+    // Insert the data into the collection
+    await db.collection("Attendee").insert({
+    'name': name,
+    'DOB': dob,
+    'password': password,
+    'Gender': selectedGender,
+    'Phone_no': phoneNumber
+    });
+
+    await db.close();
+    final snackBar = SnackBar(
+    content: const Text('Registration successful!'),
+    duration: const Duration(seconds: 3),
+    action: SnackBarAction(
+    textColor: Colors.white,
+    label: 'Dismiss',
+    onPressed: () {},
+    ),
+    backgroundColor: Colors.blue,
+    );
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(snackBar);
+    }
+    }
                         ),
                       ),
                     ],

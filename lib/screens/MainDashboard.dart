@@ -255,8 +255,6 @@ class RatingBarGraph extends StatelessWidget {
   }
 }
 
-
-
 List<ChartData> getAttendanceData() {
   return [
     ChartData('1', 50),
