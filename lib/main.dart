@@ -4,6 +4,7 @@ import 'package:riseuptracker/database/MongoDatabase.dart';
 import 'package:riseuptracker/screens/AdminLoginPage.dart';
 import 'package:riseuptracker/screens/attendeeDashboard.dart';
 import 'package:riseuptracker/screens/medicalDetails.dart';
+import 'package:riseuptracker/screens/personalDetails.dart';
 import 'package:riseuptracker/screens/qrcode/GenerateQRcode.dart';
 import 'package:riseuptracker/screens/signup_page.dart';
 import 'package:riseuptracker/screens/splash.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        "/": (context) => GeneratePage(),
+        "/": (context) => PersonalDetails(),
         //  "/": (context) => const splash(),
         MyRoutes.loginRoute: (context) => const AdminLoginPage(),
         MyRoutes.signupRoute: (context) => const RegistrationForm(),

@@ -99,43 +99,43 @@ class _MedicalDetailsState extends State<MedicalDetails> {
                 },
               ),
               SizedBox(height: 16.0),
-              DropdownButtonFormField<String>(
-                value: selectedAllergy,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedAllergy = newValue!;
-                  });
-                },
-                items: [
-                  'None',
-                  'Pollen',
-                  'Dust',
-                  'Pet dander',
-                  'Food',
-                  'Medication',
-                  'Insect sting',
-                  'Latex',
-                  'Other',
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                decoration: InputDecoration(
-                  labelText: 'Allergies',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select your allergies';
-                  }
-                  if (value == 'Other' && otherAllergy.isEmpty) {
-                    return 'Please enter your other allergy';
-                  }
-                  return null;
-                },
-              ),
+              // DropdownButtonFormField<String>(
+              //   value: selectedAllergy,
+              //   onChanged: (newValue) {
+              //     setState(() {
+              //       selectedAllergy = newValue!;
+              //     });
+              //   },
+              //   items: [
+              //     'None',
+              //     'Pollen',
+              //     'Dust',
+              //     'Pet dander',
+              //     'Food',
+              //     'Medication',
+              //     'Insect sting',
+              //     'Latex',
+              //     'Other',
+              //   ].map((String value) {
+              //     return DropdownMenuItem<String>(
+              //       value: value,
+              //       child: Text(value),
+              //     );
+              //   }).toList(),
+              //   decoration: InputDecoration(
+              //     labelText: 'Allergies',
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'Please select your allergies';
+              //     }
+              //     // if (value == 'Other' && otherAllergy.isEmpty) {
+              //     //   return 'Please enter your other allergy';
+              //     // }
+              //     return null;
+              //   },
+              // ),
               SizedBox(height: 16.0),
               if (selectedAllergy == 'Other')
                 TextFormField(
