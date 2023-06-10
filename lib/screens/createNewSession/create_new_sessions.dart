@@ -23,7 +23,6 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
   @override
   void initState() {
     super.initState();
-    // Assign the tileName directly to the sessionTag
     sessionTag = widget.tileName;
   }
 
@@ -50,7 +49,6 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
             const SizedBox(height: 16.0),
             GestureDetector(
               onTap: () {
-                // Open date picker and set the selected date to sessionDate
                 showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
@@ -99,7 +97,7 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
 
             const SizedBox(height: 40.0),
             Container(
-              width: 200.0, // Adjust the width as per your requirements
+              width: 200.0,
               child: ElevatedButton(
                 onPressed: () async {
                   if (sessionTitle != null &&
@@ -133,8 +131,7 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(snackBar);
 
-                    // Implement the logic to save the session details
-                    // You can use the sessionTitle, sessionDate, sessionLocation, and sessionTag variables
+
                   }else {
                     showDialog(
                       context: context,

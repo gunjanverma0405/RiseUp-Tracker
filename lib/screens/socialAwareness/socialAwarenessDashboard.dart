@@ -32,9 +32,7 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
   List<SessionDetails> futureSessions = [];
 
   Future<void> fetchSessions() async {
-    // Fetch sessions based on the selected filter (past, ongoing, upcoming)
-    // Replace this with your actual implementation
-    // Example: Fetch sessions from the database using filters
+
     final db = await mongo_dart.Db.create(dbURl);
     await db.open();
 
@@ -285,7 +283,7 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                     itemBuilder: (context, index) {
                       List<SessionDetails> sessions = getSessionsByFilter(sessionFilter);
                       if (sessions.isEmpty) {
-                        // Handle the case when there are no sessions for the specified filter
+                        // if empty array
                         return Center(child: Text('No sessions available.'));
                       }
                       SessionDetails session = sessions[index];
@@ -294,7 +292,6 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                           itemBuilder:
                               (context, index) {
                                 SessionDetails session = pastSessions[index];
-                                // Navigate to the corresponding screen on session click
                                 // Navigator.push(
                                 //   context,
                                 //   MaterialPageRoute(builder: (context) => SessionScreen(session)),
@@ -320,7 +317,7 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                           fontSize: 14.0,
                           ),
                           ),
-                          trailing: Icon(Icons.keyboard_arrow_right), // Add the right arrow icon here
+                          trailing: Icon(Icons.keyboard_arrow_right),
                           ),
 
                           );
