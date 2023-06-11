@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class FutureSessionPage extends StatelessWidget {
   final String sessionTitle;
   final String sessionDate;
+  final String sessionID;
 
-  FutureSessionPage({required this.sessionTitle, required this.sessionDate});
+  FutureSessionPage({required this.sessionTitle, required this.sessionDate, required this.sessionID});
 
   @override
   Widget build(BuildContext context) {

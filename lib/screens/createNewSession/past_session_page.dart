@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class PastSessionPage extends StatelessWidget {
   final String sessionTitle;
   final String sessionDate;
+  final String sessionID;
 
-  PastSessionPage({required this.sessionTitle, required this.sessionDate});
+  PastSessionPage({required this.sessionTitle, required this.sessionDate, required this.sessionID});
 
   @override
   Widget build(BuildContext context) {
