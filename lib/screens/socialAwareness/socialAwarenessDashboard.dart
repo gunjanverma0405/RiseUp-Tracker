@@ -145,14 +145,6 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
         title: Text('Social Awareness'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.person),
-            color: Colors.white,
-            iconSize: 40,
-            onPressed: null,
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
