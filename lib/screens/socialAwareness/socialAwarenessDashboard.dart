@@ -12,7 +12,8 @@ import 'attendanceLineChart.dart';
 
 class SocialAwarenessDashboard extends StatefulWidget {
   @override
-  _SocialAwarenessDashboardState createState() => _SocialAwarenessDashboardState();
+  _SocialAwarenessDashboardState createState() =>
+      _SocialAwarenessDashboardState();
 }
 
 enum SessionFilter {
@@ -43,37 +44,37 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
 
       pastSessions = sessions
           .where((session) =>
-          session['Date'].year <= currentDate.year &&
-          session['Date'].month <= currentDate.month &&
-          session['Date'].day < currentDate.day)
+              session['Date'].year <= currentDate.year &&
+              session['Date'].month <= currentDate.month &&
+              session['Date'].day < currentDate.day)
           .map((session) => SessionDetails(
-        sessionID: session['_id'].toString(),
-        sessionTitle: session['Title'],
-        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
-      ))
+                sessionID: session['_id'].toString(),
+                sessionTitle: session['Title'],
+                sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+              ))
           .toList();
       currentSessions = sessions
           .where((session) =>
-          session['Date'].year == currentDate.year &&
-          session['Date'].month == currentDate.month &&
-          session['Date'].day == currentDate.day)
+              session['Date'].year == currentDate.year &&
+              session['Date'].month == currentDate.month &&
+              session['Date'].day == currentDate.day)
           .map((session) => SessionDetails(
-        sessionID: session['_id'].toString(),
-        sessionTitle: session['Title'],
-        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
-      ))
+                sessionID: session['_id'].toString(),
+                sessionTitle: session['Title'],
+                sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+              ))
           .toList();
 
       futureSessions = sessions
           .where((session) =>
-          session['Date'].year >= currentDate.year &&
-          session['Date'].month >= currentDate.month &&
-          session['Date'].day > currentDate.day)
+              session['Date'].year >= currentDate.year &&
+              session['Date'].month >= currentDate.month &&
+              session['Date'].day > currentDate.day)
           .map((session) => SessionDetails(
-        sessionID: session['_id'].toString(),
-        sessionTitle: session['Title'],
-        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
-      ))
+                sessionID: session['_id'].toString(),
+                sessionTitle: session['Title'],
+                sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+              ))
           .toList();
     });
 
@@ -94,9 +95,11 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
   }
 
   // Navigate to the selected session page based on the session type
-  void navigateToSessionPage(String sessionID,String sessionTitle,
-      String sessionDate,
-      ) {
+  void navigateToSessionPage(
+    String sessionID,
+    String sessionTitle,
+    String sessionDate,
+  ) {
     if (sessionFilter == SessionFilter.past) {
       Navigator.push(
         context,
@@ -235,7 +238,8 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CreateNewSessionPage(tileName: "Social Awareness"),
+                        builder: (context) =>
+                            CreateNewSessionPage(tileName: "Social Awareness"),
                       ),
                     );
                   },
@@ -301,7 +305,9 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
                       ),
                     ),
                     SizedBox(height: 16.0),
-                    if (pastSessions.isEmpty && currentSessions.isEmpty && futureSessions.isEmpty)
+                    if (pastSessions.isEmpty &&
+                        currentSessions.isEmpty &&
+                        futureSessions.isEmpty)
                       Text('No sessions found')
                     else
                       ListView.builder(
@@ -309,7 +315,8 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: getSessionsByFilter(sessionFilter).length,
                         itemBuilder: (BuildContext context, int index) {
-                          final session = getSessionsByFilter(sessionFilter)[index];
+                          final session =
+                              getSessionsByFilter(sessionFilter)[index];
                           return Column(
                             children: [
                               ListTile(
@@ -334,12 +341,10 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
                                 thickness: 1,
                                 color: Colors.grey,
                               ),
-
                             ],
                           );
                         },
                       )
-
                   ],
                 ),
               ),
@@ -349,7 +354,6 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
       ),
     );
   }
-
 }
 
 class FilterButton extends StatelessWidget {
@@ -376,11 +380,14 @@ class FilterButton extends StatelessWidget {
         ),
       ),
       style: ButtonStyle(
-        backgroundColor: isActive ? MaterialStateProperty.all(Colors.blueAccent) : null,
+        backgroundColor:
+            isActive ? MaterialStateProperty.all(Colors.blueAccent) : null,
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
-            side: isActive ? BorderSide.none : BorderSide(color: Colors.grey.shade300),
+            side: isActive
+                ? BorderSide.none
+                : BorderSide(color: Colors.grey.shade300),
           ),
         ),
       ),
@@ -399,4 +406,3 @@ class SessionDetails {
     required this.sessionDate,
   });
 }
-
