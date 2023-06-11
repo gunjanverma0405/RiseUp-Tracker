@@ -47,7 +47,7 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
           session['Date'].month <= currentDate.month &&
           session['Date'].day < currentDate.day)
           .map((session) => SessionDetails(
-        sessionId: session['_id'].toString(),
+        sessionID: session['_id'].toString(),
         sessionTitle: session['Title'],
         sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
       ))
@@ -58,7 +58,7 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
           session['Date'].month == currentDate.month &&
           session['Date'].day == currentDate.day)
           .map((session) => SessionDetails(
-        sessionId: session['_id'].toString(),
+        sessionID: session['_id'].toString(),
         sessionTitle: session['Title'],
         sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
       ))
@@ -70,7 +70,7 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
           session['Date'].month >= currentDate.month &&
           session['Date'].day > currentDate.day)
           .map((session) => SessionDetails(
-        sessionId: session['_id'].toString(),
+        sessionID: session['_id'].toString(),
         sessionTitle: session['Title'],
         sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
       ))
@@ -102,6 +102,7 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
           builder: (context) => PastSessionPage(
             sessionTitle: session.sessionTitle,
             sessionDate: session.sessionDate,
+            sessionID: session.sessionID,
           ),
         ),
       );
@@ -112,6 +113,7 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
           builder: (context) => OngoingSessionPage(
             sessionTitle: session.sessionTitle,
             sessionDate: session.sessionDate,
+            sessionID: session.sessionID,
           ),
         ),
       );
@@ -122,6 +124,7 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
           builder: (context) => FutureSessionPage(
             sessionTitle: session.sessionTitle,
             sessionDate: session.sessionDate,
+            sessionID: session.sessionID,
           ),
         ),
       );
@@ -388,12 +391,12 @@ class FilterButton extends StatelessWidget {
 }
 
 class SessionDetails {
-  final String sessionId;
+  final String sessionID;
   final String sessionTitle;
   final String sessionDate;
 
   SessionDetails({
-    required this.sessionId,
+    required this.sessionID,
     required this.sessionTitle,
     required this.sessionDate,
   });

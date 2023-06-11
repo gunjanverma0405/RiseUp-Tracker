@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        "/": (context) => GeneratePage(),
-        // "/": (context) => const splash(),
+        //"/": (context) => GeneratePage(),
+         "/": (context) => const splash(),
         MyRoutes.loginRoute: (context) => const AdminLoginPage(),
         MyRoutes.signupRoute: (context) => const RegistrationForm(),
       },
