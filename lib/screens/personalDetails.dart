@@ -201,6 +201,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
+                    Navigator.pop(context);
                   }
                 },
                 child: Text('Submit'),

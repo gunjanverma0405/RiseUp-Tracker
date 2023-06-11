@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:riseuptracker/screens/attendeeDashboard.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth _auth;
@@ -29,6 +30,9 @@ class FirebaseAuthMethods {
             await auth.signInWithCredential(credential);
 
         user = userCredential.user;
+
+        await Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SessionPage()));
       } on FirebaseAuthException catch (e) {
         final snackBar = SnackBar(
           content: Text(e.message!),
