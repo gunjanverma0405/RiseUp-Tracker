@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 import '../../database/db_connects.dart';
 import '../createNewSession/create_new_sessions.dart';
+import '../createNewSession/future_session_page.dart';
+import '../createNewSession/ongoing_session_page.dart';
+import '../createNewSession/past_session_page.dart';
 import 'DemographicPieChart.dart';
 import 'RatingBarGraph.dart';
 import 'attendanceLineChart.dart';
@@ -87,6 +90,41 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
         return futureSessions;
       default:
         return [];
+    }
+  }
+
+  // Navigate to the selected session page based on the session type
+  void navigateToSessionPage(SessionDetails session) {
+    if (sessionFilter == SessionFilter.past) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PastSessionPage(
+            sessionTitle: session.sessionTitle,
+            sessionDate: session.sessionDate,
+          ),
+        ),
+      );
+    } else if (sessionFilter == SessionFilter.ongoing) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OngoingSessionPage(
+            sessionTitle: session.sessionTitle,
+            sessionDate: session.sessionDate,
+          ),
+        ),
+      );
+    } else if (sessionFilter == SessionFilter.upcoming) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FutureSessionPage(
+            sessionTitle: session.sessionTitle,
+            sessionDate: session.sessionDate,
+          ),
+        ),
+      );
     }
   }
 
@@ -287,11 +325,15 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
                                   style: TextStyle(fontSize: 13),
                                 ),
                                 trailing: Icon(Icons.arrow_forward_ios),
+                                onTap: () {
+                                  navigateToSessionPage(session);
+                                },
                               ),
                               Divider(
                                 thickness: 1,
                                 color: Colors.grey,
                               ),
+
                             ],
                           );
                         },
