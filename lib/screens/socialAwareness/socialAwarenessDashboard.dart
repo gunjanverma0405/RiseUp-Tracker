@@ -276,12 +276,28 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
                         itemCount: getSessionsByFilter(sessionFilter).length,
                         itemBuilder: (BuildContext context, int index) {
                           final session = getSessionsByFilter(sessionFilter)[index];
-                          return ListTile(
-                            title: Text(session.sessionTitle),
-                            subtitle: Text(session.sessionDate),
+                          return Column(
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  session.sessionTitle,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                subtitle: Text(
+                                  "Date: ${session.sessionDate}",
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                trailing: Icon(Icons.arrow_forward_ios),
+                              ),
+                              Divider(
+                                thickness: 1,
+                                color: Colors.grey,
+                              ),
+                            ],
                           );
                         },
-                      ),
+                      )
+
                   ],
                 ),
               ),
