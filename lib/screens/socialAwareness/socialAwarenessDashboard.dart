@@ -94,15 +94,17 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
   }
 
   // Navigate to the selected session page based on the session type
-  void navigateToSessionPage(SessionDetails session) {
+  void navigateToSessionPage(String sessionID,String sessionTitle,
+      String sessionDate,
+      ) {
     if (sessionFilter == SessionFilter.past) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => PastSessionPage(
-            sessionTitle: session.sessionTitle,
-            sessionDate: session.sessionDate,
-            sessionID: session.sessionID,
+            sessionTitle: sessionTitle,
+            sessionDate: sessionDate,
+            sessionID: sessionID,
           ),
         ),
       );
@@ -111,9 +113,9 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
         context,
         MaterialPageRoute(
           builder: (context) => OngoingSessionPage(
-            sessionTitle: session.sessionTitle,
-            sessionDate: session.sessionDate,
-            sessionID: session.sessionID,
+            sessionTitle: sessionTitle,
+            sessionDate: sessionDate,
+            sessionID: sessionID,
           ),
         ),
       );
@@ -122,9 +124,9 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
         context,
         MaterialPageRoute(
           builder: (context) => FutureSessionPage(
-            sessionTitle: session.sessionTitle,
-            sessionDate: session.sessionDate,
-            sessionID: session.sessionID,
+            sessionTitle: sessionTitle,
+            sessionDate: sessionDate,
+            sessionID: sessionID,
           ),
         ),
       );
@@ -329,7 +331,11 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
                                 ),
                                 trailing: Icon(Icons.arrow_forward_ios),
                                 onTap: () {
-                                  navigateToSessionPage(session);
+                                  navigateToSessionPage(
+                                    session.sessionID,
+                                    session.sessionTitle,
+                                    session.sessionDate,
+                                  );
                                 },
                               ),
                               Divider(
