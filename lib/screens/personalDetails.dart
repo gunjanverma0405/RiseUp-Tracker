@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:riseuptracker/screens/medicalDetails.dart';
 
 class PersonalDetails extends StatefulWidget {
@@ -10,7 +11,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   final TextEditingController _aadharNumberController = TextEditingController();
   final TextEditingController _familyMembersController =
       TextEditingController();
-
+  final TextEditingController _dobController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
   String educationStatus = "";
   int familyMembers = 0;
   String aadharNumber = "";
@@ -35,6 +37,53 @@ class _PersonalDetailsState extends State<PersonalDetails> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
+              TextFormField(
+                controller: _addressController,
+                decoration: InputDecoration(
+                  labelText: 'Address',
+                  hintText: 'Enter your address',
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your address';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                controller: _dobController,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.calendar_today),
+                  labelText: "Date of birth",
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+
+                  if (pickedDate != null) {
+                    String formattedDate =
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
+                    setState(() {
+                      _dobController.text = formattedDate;
+                    });
+                  }
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your date of birth';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(labelText: 'Education Status'),
                 items: <String>[
@@ -70,11 +119,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               ),
               TextFormField(
                 controller: _familyMembersController,
-                decoration: InputDecoration(labelText: 'Family Members'),
+                decoration: InputDecoration(
+                    labelText: 'No. of children in your family'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter the number of family members';
+                    return 'Please enter the number of children in your family';
                   }
                   return null;
                 },
@@ -85,6 +135,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               TextFormField(
                 controller: _aadharNumberController,
                 decoration: InputDecoration(labelText: 'Aadhar Number'),
+                keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter Aadhar number';
@@ -198,26 +249,23 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               SizedBox(
                 height: 30,
               ),
-
               Container(
                 height: 50,
                 width: 80,
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MedicalDetails(),
-                          ),
-                        );
-
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MedicalDetails(),
+                        ),
+                      );
                     }
                   },
                   child: Text('Next'),
                 ),
-                ),
-
+              ),
             ],
           ),
         ),

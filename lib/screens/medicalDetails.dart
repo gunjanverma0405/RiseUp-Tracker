@@ -36,6 +36,12 @@ class _MedicalDetailsState extends State<MedicalDetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Medical Diagnosis'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -56,42 +62,43 @@ class _MedicalDetailsState extends State<MedicalDetails> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8.0),
-                TextFormField(
-                  controller: _dateController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.calendar_today),
-                    labelText: "Enter your date of last checkup",
-                  ),
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
+                SizedBox(height: 50.0),
+                // TextFormField(
+                //   controller: _dateController,
+                //   decoration: const InputDecoration(
+                //     icon: Icon(Icons.calendar_today),
+                //     labelText: "Enter your date of last checkup",
+                //   ),
+                //   readOnly: true,
+                //   onTap: () async {
+                //     DateTime? pickedDate = await showDatePicker(
+                //       context: context,
+                //       initialDate: DateTime.now(),
+                //       firstDate: DateTime(1900),
+                //       lastDate: DateTime.now(),
+                //     );
 
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
-                      setState(() {
-                        _dateController.text = formattedDate;
-                        lastHealthCheckup = pickedDate;
-                      });
-                    }
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your date of last checkup';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 8.0),
+                //     if (pickedDate != null) {
+                //       String formattedDate =
+                //           DateFormat('dd-MM-yyyy').format(pickedDate);
+                //       setState(() {
+                //         _dateController.text = formattedDate;
+                //         lastHealthCheckup = pickedDate;
+                //       });
+                //     }
+                //   },
+                //   validator: (value) {
+                //     if (value!.isEmpty) {
+                //       return 'Please enter your date of last checkup';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // SizedBox(height: 8.0),
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Enter symptoms (if any)',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -102,7 +109,10 @@ class _MedicalDetailsState extends State<MedicalDetails> {
                 ),
                 SizedBox(height: 8.0),
                 DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Chronic Disease'),
+                  decoration: InputDecoration(
+                    labelText: 'Chronic Disease',
+                    border: OutlineInputBorder(),
+                  ),
                   items: <String>[
                     'None',
                     'Asthma',
@@ -205,7 +215,7 @@ class _MedicalDetailsState extends State<MedicalDetails> {
                       return null;
                     },
                   ),
-                SizedBox(height: 16.0),
+                SizedBox(height: 25.0),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
