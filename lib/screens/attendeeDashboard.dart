@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:riseuptracker/screens/FeedbackForm.dart';
 import 'package:riseuptracker/screens/personalDetails.dart';
 import 'package:riseuptracker/screens/qrcode/QRScanner.dart';
 
@@ -9,7 +10,6 @@ class SessionPage extends StatefulWidget {
 
 class _SessionPageState extends State<SessionPage> {
   bool qrScanned = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,6 @@ class _SessionPageState extends State<SessionPage> {
             );
           },
         ),
-
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -106,8 +105,10 @@ class _SessionPageState extends State<SessionPage> {
                           IconButton(
                             icon: Icon(Icons.feedback),
                             onPressed: () {
-                              // Handle feedback button press
-                              // based on the session ID
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FeedbackForm()));
                             },
                           ),
                         ],
@@ -141,8 +142,6 @@ class _SessionPageState extends State<SessionPage> {
     );
   }
 }
-
-
 
 class Session {
   final String id;
