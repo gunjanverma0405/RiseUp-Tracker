@@ -30,9 +30,6 @@ class GeneratePageState extends State<GeneratePage> {
       final file = File(tempPath);
       await file.writeAsBytes(jpegBytes);
 
-      await ImageGallerySaver.saveFile(
-          tempPath); // Save the image to the gallery
-
       final xfile = XFile(tempPath);
       await Share.shareXFiles([xfile], text: qrData);
     } catch (e) {
