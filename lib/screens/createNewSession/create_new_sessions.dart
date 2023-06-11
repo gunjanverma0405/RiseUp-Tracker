@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
+import 'package:riseuptracker/database/db_connects.dart';
+import 'package:riseuptracker/screens/createNewSession/updateSessionWithQRCodeImage.dart';
+
+import '../qrcode/GenerateQRcode.dart';
 
 class CreateNewSessionPage extends StatefulWidget {
   final String tileName; // Pass the tile name as a parameter
@@ -18,7 +23,6 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
   @override
   void initState() {
     super.initState();
-    // Assign the tileName directly to the sessionTag
     sessionTag = widget.tileName;
   }
 
@@ -45,7 +49,6 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
             const SizedBox(height: 16.0),
             GestureDetector(
               onTap: () {
-                // Open date picker and set the selected date to sessionDate
                 showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
@@ -94,15 +97,42 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
 
             const SizedBox(height: 40.0),
             Container(
-              width: 200.0, // Adjust the width as per your requirements
+              width: 200.0,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (sessionTitle != null &&
                       sessionDate != null &&
                       sessionLocation != null) {
-                    // Implement the logic to save the session details
-                    // You can use the sessionTitle, sessionDate, sessionLocation, and sessionTag variables
-                  } else {
+                    final db = await mongo_dart.Db.create(dbURl);
+                    await db.open();
+                    // Insert the data into the collection
+                    final result = await db.collection("Session").insert({
+                      'Title':sessionTitle,
+                      'Date': sessionDate,
+                      'Location': sessionLocation,
+                      'Tag': sessionTag
+                    });
+
+                    //final currId = result['_id'].toHexString();
+                    //final qrCodeImage = generateQRCode(currId);
+                    await db.close();
+                    //updateSessionWithQRCodeImage(sessionId, qrCodeImage);
+
+                    final snackBar = SnackBar(
+                      content: const Text('Session Added!!'),
+                      duration: const Duration(seconds: 3),
+                      action: SnackBarAction(
+                        textColor: const Color.fromARGB(255, 35, 19, 19),
+                        label: 'Dismiss',
+                        onPressed: () {},
+                      ),
+                      backgroundColor: Colors.blue,
+                    );
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(snackBar);
+
+
+                  }else {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -138,3 +168,4 @@ class _CreateNewSessionPageState extends State<CreateNewSessionPage> {
     );
   }
 }
+

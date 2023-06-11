@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:riseuptracker/database/MongoDatabase.dart';
 import 'package:riseuptracker/screens/AdminLoginPage.dart';
+import 'package:riseuptracker/screens/createNewSession/create_new_sessions.dart';
 import 'package:riseuptracker/screens/attendeeDashboard.dart';
 import 'package:riseuptracker/screens/medicalDetails.dart';
 import 'package:riseuptracker/screens/personalDetails.dart';

@@ -13,7 +13,7 @@ class _SessionPageState extends State<SessionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Session Page'),
+
       ),
       body: Column(
         children: [

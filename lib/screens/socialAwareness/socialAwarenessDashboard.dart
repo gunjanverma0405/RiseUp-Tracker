@@ -1,38 +1,100 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-
+import 'package:intl/intl.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
+import '../../database/db_connects.dart';
 import '../createNewSession/create_new_sessions.dart';
 import 'DemographicPieChart.dart';
 import 'RatingBarGraph.dart';
 import 'attendanceLineChart.dart';
 
-class socialAwarenessDashboard extends StatefulWidget {
+class SocialAwarenessDashboard extends StatefulWidget {
   @override
-  _socialAwarenessDashboardState createState() =>
-      _socialAwarenessDashboardState();
+  _SocialAwarenessDashboardState createState() => _SocialAwarenessDashboardState();
 }
 
-class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
+enum SessionFilter {
+  past,
+  ongoing,
+  upcoming,
+}
+
+class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
   bool showGenderChart = false;
   bool showAgeChart = false;
 
-  List<SessionDetails> sessionDetails = [
-    SessionDetails(
-      sessionId: '1',
-      sessionTitle: 'Raising Awareness on Mental Health',
-      sessionDate: '06-10-2022',
-    ),
-    SessionDetails(
-      sessionId: '4',
-      sessionTitle: 'Fighting Online Harassment',
-      sessionDate: '06-10-2022',
-    ),
-    SessionDetails(
-      sessionId: '7',
-      sessionTitle: 'Protecting Our Environment',
-      sessionDate: '06-10-2022',
-    ),
-  ];
+  SessionFilter sessionFilter = SessionFilter.upcoming;
+
+  List<SessionDetails> pastSessions = [];
+  List<SessionDetails> currentSessions = [];
+  List<SessionDetails> futureSessions = [];
+
+  Future<void> fetchSessions() async {
+    final db = await mongo_dart.Db.create(dbURl);
+    await db.open();
+
+    final sessionsCollection = db.collection('Session');
+    final sessions = await sessionsCollection.find().toList();
+
+    setState(() {
+      final currentDate = DateTime.now();
+
+      pastSessions = sessions
+          .where((session) =>
+          session['Date'].year <= currentDate.year &&
+          session['Date'].month <= currentDate.month &&
+          session['Date'].day < currentDate.day)
+          .map((session) => SessionDetails(
+        sessionId: session['_id'].toString(),
+        sessionTitle: session['Title'],
+        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+      ))
+          .toList();
+      currentSessions = sessions
+          .where((session) =>
+          session['Date'].year == currentDate.year &&
+          session['Date'].month == currentDate.month &&
+          session['Date'].day == currentDate.day)
+          .map((session) => SessionDetails(
+        sessionId: session['_id'].toString(),
+        sessionTitle: session['Title'],
+        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+      ))
+          .toList();
+
+      futureSessions = sessions
+          .where((session) =>
+          session['Date'].year >= currentDate.year &&
+          session['Date'].month >= currentDate.month &&
+          session['Date'].day > currentDate.day)
+          .map((session) => SessionDetails(
+        sessionId: session['_id'].toString(),
+        sessionTitle: session['Title'],
+        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+      ))
+          .toList();
+    });
+
+    await db.close();
+  }
+
+  List<SessionDetails> getSessionsByFilter(SessionFilter filter) {
+    switch (filter) {
+      case SessionFilter.past:
+        return pastSessions;
+      case SessionFilter.ongoing:
+        return currentSessions;
+      case SessionFilter.upcoming:
+        return futureSessions;
+      default:
+        return [];
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSessions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +116,6 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
           padding: EdgeInsets.all(10.0),
           child: Column(
             children: [
-
               SizedBox(height: 16.0),
               Card(
                 elevation: 4.0,
@@ -138,10 +199,11 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CreateNewSessionPage(tileName: "Social Awareness",)),
+                      MaterialPageRoute(
+                        builder: (context) => CreateNewSessionPage(tileName: "Social Awareness"),
+                      ),
                     );
                   },
-
                   icon: Icon(Icons.add),
                   label: Text('Create New Session'),
                   style: ElevatedButton.styleFrom(
@@ -153,54 +215,129 @@ class _socialAwarenessDashboardState extends State<socialAwarenessDashboard> {
                   ),
                 ),
               ),
-
               SizedBox(height: 12.0),
               Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: sessionDetails.length,
-                  itemBuilder: (context, index) {
-                    SessionDetails session = sessionDetails[index];
-                    return GestureDetector(
-                      onTap: () {
-                        // Navigate to the corresponding screen on session click
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => SessionScreen(session)),
-                        // );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey)),
-                        ),
-                        child: ListTile(
-                          title: Text(
-                            'Session ${session.sessionId}: ${session.sessionTitle}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0,
+                child: Column(
+                  children: [
+                    SizedBox(height: 16.0),
+                    Card(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            FilterButton(
+                              text: 'Past',
+                              isActive: sessionFilter == SessionFilter.past,
+                              onPressed: () {
+                                setState(() {
+                                  sessionFilter = SessionFilter.past;
+                                });
+                              },
                             ),
-                          ),
-                          subtitle: Text(
-                            'Date: ${session.sessionDate}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12.0,
+                            FilterButton(
+                              text: 'Ongoing',
+                              isActive: sessionFilter == SessionFilter.ongoing,
+                              onPressed: () {
+                                setState(() {
+                                  sessionFilter = SessionFilter.ongoing;
+                                });
+                              },
                             ),
-                          ),
+                            FilterButton(
+                              text: 'Upcoming',
+                              isActive: sessionFilter == SessionFilter.upcoming,
+                              onPressed: () {
+                                setState(() {
+                                  sessionFilter = SessionFilter.upcoming;
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
+                    ),
+                    SizedBox(height: 16.0),
+                    if (pastSessions.isEmpty && currentSessions.isEmpty && futureSessions.isEmpty)
+                      Text('No sessions found')
+                    else
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: getSessionsByFilter(sessionFilter).length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final session = getSessionsByFilter(sessionFilter)[index];
+                          return Column(
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  session.sessionTitle,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                subtitle: Text(
+                                  "Date: ${session.sessionDate}",
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                trailing: Icon(Icons.arrow_forward_ios),
+                              ),
+                              Divider(
+                                thickness: 1,
+                                color: Colors.grey,
+                              ),
+                            ],
+                          );
+                        },
+                      )
+
+                  ],
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+}
+
+class FilterButton extends StatelessWidget {
+  final String text;
+  final bool isActive;
+  final VoidCallback onPressed;
+
+  const FilterButton({
+    required this.text,
+    required this.isActive,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: isActive ? Colors.white : Colors.black,
+          fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+          fontSize: 15,
+        ),
+      ),
+      style: ButtonStyle(
+        backgroundColor: isActive ? MaterialStateProperty.all(Colors.blueAccent) : null,
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: isActive ? BorderSide.none : BorderSide(color: Colors.grey.shade300),
           ),
         ),
       ),
@@ -219,3 +356,4 @@ class SessionDetails {
     required this.sessionDate,
   });
 }
+

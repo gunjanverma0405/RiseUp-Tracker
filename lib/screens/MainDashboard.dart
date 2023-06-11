@@ -81,10 +81,9 @@ class MainDashboard extends StatelessWidget {
   Widget buildTile(BuildContext context, String title, IconData icon, String screen) {
     return GestureDetector(
       onTap: () {
-        //Navigate to the corresponding screen on tile click
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  socialAwarenessDashboard()),
+          MaterialPageRoute(builder: (context) =>  SocialAwarenessDashboard()),
         );
       },
       child: Card(
@@ -94,7 +93,7 @@ class MainDashboard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Icon and text in the middle
+
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +200,7 @@ class RatingBarGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300, // Adjust the height as needed
+      height: 300,
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(
           title: AxisTitle(
@@ -226,7 +225,7 @@ class RatingBarGraph extends StatelessWidget {
             fontSize: 17,
             fontWeight: FontWeight.bold,
           ),
-          alignment: ChartAlignment.near, // Align title to the left
+          alignment: ChartAlignment.near,
         ),
 
         series: <BarSeries<ChartData, String>>[
@@ -235,7 +234,7 @@ class RatingBarGraph extends StatelessWidget {
             dataSource: data,
             xValueMapper: (ChartData data, _) => data.category,
             yValueMapper: (ChartData data, _) => data.value,
-            // Customize colors for each bar
+
             pointColorMapper: (ChartData data, _) {
               if (data.category == 'Social Awareness') {
                 return Colors.blue;
