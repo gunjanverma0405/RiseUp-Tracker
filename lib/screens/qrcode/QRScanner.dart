@@ -26,6 +26,7 @@ class _QRScanPageState extends State<QRScanPage> {
         title: const Text('QR Code Scanner'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
             flex: 5,
@@ -34,26 +35,36 @@ class _QRScanPageState extends State<QRScanPage> {
               onQRViewCreated: _onQRViewCreated,
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Center(
+      Expanded(
+        flex: 1,
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Center(
               child: Text(
                 'Scanned QR Code: $qrData',
                 style: TextStyle(fontSize: 20),
               ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: qrData.isNotEmpty
-                ? () {
-                    widget.onQRScanned();
-                    Navigator.pop(context);
-                  }
-                : null,
-            child: Text('Submit QR Code'),
-          ),
-        ],
+            SizedBox(height: 10), // Adjust the spacing between the text and the button
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                onPressed: qrData.isNotEmpty
+                    ? () {
+                  widget.onQRScanned();
+                  Navigator.pop(context);
+                }
+                    : null,
+                child: Text('Submit'),
+              ),
+            ),
+          ],
+        ),
       ),
+  ],
+    ),
+
     );
   }
 

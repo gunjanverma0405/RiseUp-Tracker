@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../qrcode/GenerateQRcode.dart';
 
 class OngoingSessionPage extends StatelessWidget {
   final String sessionTitle;
@@ -12,7 +13,7 @@ class OngoingSessionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
-        title: Text('Ongoing Session'),
+        title: Text(''),
       ),
       body: Container(
         margin: EdgeInsets.all(20),
@@ -55,6 +56,14 @@ class OngoingSessionPage extends StatelessWidget {
                 onPressed: () {
                   // Handle button press
                   // You can navigate to the attendance page or perform any other action
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GeneratePage(
+                        initialData: sessionID,
+                      ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.blueAccent,

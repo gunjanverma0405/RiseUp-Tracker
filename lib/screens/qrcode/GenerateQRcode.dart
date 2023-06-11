@@ -7,6 +7,9 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 class GeneratePage extends StatefulWidget {
+  final String initialData; // New field to hold the initial data for the QR code
+
+  GeneratePage({required this.initialData});
   @override
   State<StatefulWidget> createState() => GeneratePageState();
 }
@@ -15,6 +18,11 @@ class GeneratePageState extends State<GeneratePage> {
   TextEditingController qrdataFeed = TextEditingController();
   String qrData = "";
 
+  @override
+  void initState() {
+    super.initState();
+    qrData = widget.initialData; // Set the initial data for the QR code
+  }
   Future<void> _shareQRCode() async {
     try {
       final qrCode = await QrPainter(data: qrData, version: QrVersions.auto)
@@ -29,8 +37,6 @@ class GeneratePageState extends State<GeneratePage> {
 
       final file = File(tempPath);
       await file.writeAsBytes(jpegBytes);
-
-      await ImageGallerySaver.saveFile(tempPath);
 
       final xfile = XFile(tempPath);
       await Share.shareXFiles([xfile], text: qrData);
@@ -59,7 +65,7 @@ class GeneratePageState extends State<GeneratePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('QR Code Generator'),
+        title: const Text('QR Code'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.share),
@@ -88,50 +94,7 @@ class GeneratePageState extends State<GeneratePage> {
               const SizedBox(
                 height: 40.0,
               ),
-              const Text(
-                "New QR Link Generator",
-                style: TextStyle(fontSize: 20.0),
-              ),
-              TextField(
-                controller: qrdataFeed,
-                decoration: InputDecoration(
-                  hintText: "Input your link or data",
-                ),
-                // onChanged: (text) {
-                //   setState(() {
-                //     qrData = text;
-                //   });
-                // },
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
-                child: TextButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                      const EdgeInsets.all(15.0),
-                    ),
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        side: const BorderSide(color: Colors.blue, width: 3.0),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      qrData = qrdataFeed.text;
-                    });
-                  },
-                  child: const Text(
-                    "Generate QR",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              )
+
             ],
           ),
         ),

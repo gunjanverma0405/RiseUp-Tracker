@@ -10,15 +10,31 @@ class SessionPage extends StatefulWidget {
 class _SessionPageState extends State<SessionPage> {
   bool qrScanned = false;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Dashboard"),
+        title: Text(""),
+        leading: IconButton(
+          icon: Icon(Icons.person),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PersonalDetails(),
+              ),
+            );
+          },
+        ),
+
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
-            onPressed: () {},
+            onPressed: () {
+              // Handle the logout button press
+            },
           ),
         ],
       ),
@@ -27,18 +43,16 @@ class _SessionPageState extends State<SessionPage> {
           Stack(
             alignment: Alignment.bottomRight,
             children: [
-              Container(
-                width: 150,
-                height: 150,
+              /*Container(
+                width: 300,
+                height: 120,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: AssetImage('assets/images/User.png'),
-                    fit: BoxFit.cover,
+                    image: AssetImage('assets/images/Logo2.png'),
                   ),
                 ),
-              ),
-              IconButton(
+              ),*/
+              /*IconButton(
                 icon: Icon(Icons.edit), // Edit icon
                 onPressed: () {
                   Navigator.push(
@@ -46,8 +60,22 @@ class _SessionPageState extends State<SessionPage> {
                       MaterialPageRoute(
                           builder: (context) => PersonalDetails()));
                 },
-              ),
+              ),*/
             ],
+          ),
+          SizedBox(height: 25),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'Your Sessions',
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
           SizedBox(height: 16),
           Expanded(
@@ -113,6 +141,8 @@ class _SessionPageState extends State<SessionPage> {
     );
   }
 }
+
+
 
 class Session {
   final String id;
