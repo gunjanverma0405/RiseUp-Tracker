@@ -198,6 +198,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               SizedBox(
                 height: 30,
               ),
+
               Container(
                 height: 50,
                 width: 80,
@@ -215,7 +216,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   },
                   child: Text('Next'),
                 ),
-              ),
+                ),
 
             ],
           ),
