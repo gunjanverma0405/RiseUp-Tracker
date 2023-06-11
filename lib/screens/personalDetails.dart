@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:riseuptracker/screens/medicalDetails.dart';
 
 class PersonalDetails extends StatefulWidget {
   @override
@@ -201,7 +202,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MedicalDetails()));
                   }
                 },
                 child: Text('Submit'),

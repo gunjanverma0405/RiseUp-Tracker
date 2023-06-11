@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:riseuptracker/screens/attendeeDashboard.dart';
 
 class MedicalDetails extends StatefulWidget {
   @override
@@ -207,7 +208,12 @@ class _MedicalDetailsState extends State<MedicalDetails> {
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SessionPage()));
+                    }
                   },
                   child: Text('Submit'),
                 ),
