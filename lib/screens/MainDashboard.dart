@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:riseuptracker/screens/socialAwareness/socialAwarenessDashboard.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:riseuptracker/screens/selectUserType.dart';
+
 
 class MainDashboard extends StatelessWidget {
   @override
@@ -12,10 +14,17 @@ class MainDashboard extends StatelessWidget {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: Icon(Icons.person),
-            color: Colors.white,
-            iconSize: 40,
-            onPressed: null,
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              // Handle the logout button press
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserTypePage(),
+                ),
+                    (route) => false, // Remove all previous routes
+              );
+            },
           ),
         ],
       ),

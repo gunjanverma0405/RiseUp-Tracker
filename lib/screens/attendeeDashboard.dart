@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riseuptracker/screens/FeedbackForm.dart';
 import 'package:riseuptracker/screens/personalDetails.dart';
 import 'package:riseuptracker/screens/qrcode/QRScanner.dart';
+import 'package:riseuptracker/screens/selectUserType.dart';
 
 class SessionPage extends StatefulWidget {
   @override
@@ -33,9 +34,17 @@ class _SessionPageState extends State<SessionPage> {
             icon: Icon(Icons.logout),
             onPressed: () {
               // Handle the logout button press
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserTypePage(),
+                ),
+                    (route) => false, // Remove all previous routes
+              );
             },
           ),
         ],
+
       ),
       body: Column(
         children: [
