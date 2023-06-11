@@ -83,7 +83,7 @@ class MainDashboard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  socialAwarenessDashboard()),
+          MaterialPageRoute(builder: (context) =>  SocialAwarenessDashboard()),
         );
       },
       child: Card(
