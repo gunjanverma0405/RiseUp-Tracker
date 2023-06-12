@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       routes: {
 
 
+
          "/": (context) => const splash(),
 
         //"/": (context) => SessionPage(),
