@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riseuptracker/database/db_connects.dart';
+import 'package:riseuptracker/screens/FeedbackForm.dart';
 import 'package:riseuptracker/screens/personalDetails.dart';
 import 'package:riseuptracker/screens/qrcode/QRScanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -256,6 +257,12 @@ class _SessionPageState extends State<SessionPage> {
                 icon: Icon(Icons.feedback),
                 onPressed: () {
                   // showFeedbackDialog(session.id);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FeedbackForm()
+                    ),
+                  );
                 },
               ),
             ],
