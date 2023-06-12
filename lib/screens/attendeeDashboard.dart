@@ -296,11 +296,15 @@ class _SessionPageState extends State<SessionPage> {
   void storeAttendance(String sessionID) async {
     final db = await mongo_dart.Db.create(dbURl);
     try {
+      final db = await mongo_dart.Db.create(dbURl);
       await db.open();
 
-      final user = FirebaseAuth.instance.currentUser;
-      final userId = user?.uid ?? '';
-
+      final usersCollection = db.collection('Attendee');
+      final user = await usersCollection.findOne(
+        mongo_dart.where.eq('password', '123456'),
+      );
+      await db.close();
+      String userId = user?['_id']?.toString() ?? '';
       final attendanceDocument = {
         'user_id': userId,
         'session_id': sessionID,
