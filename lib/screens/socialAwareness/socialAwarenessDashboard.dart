@@ -60,33 +60,28 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
           .map((session) => SessionDetails(
         sessionID: session['_id'].toString(),
         sessionTitle: session['Title'],
-        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+        sessionDate: session['Date'] is DateTime
+            ? DateFormat('yyyy-MM-dd').format(session['Date'])
+            : DateFormat('yyyy-MM-dd').format(DateTime.parse(session['Date'])),
       ))
           .toList();
 
       currentSessions = sessions
           .where((session) {
-        final sessionDate = session['Date'];
-        if (sessionDate is DateTime) {
-          return sessionDate.year == currentDate.year &&
-              sessionDate.month == currentDate.month &&
-              sessionDate.day == currentDate.day;
-        } else if (sessionDate is String) {
-          try {
-            final parsedDate = DateTime.parse(sessionDate);
-            return parsedDate.year == currentDate.year &&
-                parsedDate.month == currentDate.month &&
-                parsedDate.day == currentDate.day;
-          } catch (e) {
-            return false;
-          }
-        }
-        return false;
+        final sessionDate = session['Date'] is DateTime
+            ? session['Date']
+            : DateTime.parse(session['Date']);
+
+        return sessionDate.year == currentDate.year &&
+            sessionDate.month == currentDate.month &&
+            sessionDate.day == currentDate.day;
       })
           .map((session) => SessionDetails(
         sessionID: session['_id'].toString(),
         sessionTitle: session['Title'],
-        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+        sessionDate: session['Date'] is DateTime
+            ? DateFormat('yyyy-MM-dd').format(session['Date'])
+            : DateFormat('yyyy-MM-dd').format(DateTime.parse(session['Date'])),
       ))
           .toList();
 
@@ -108,10 +103,13 @@ class _SocialAwarenessDashboardState extends State<SocialAwarenessDashboard> {
           .map((session) => SessionDetails(
         sessionID: session['_id'].toString(),
         sessionTitle: session['Title'],
-        sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+        sessionDate: session['Date'] is DateTime
+            ? DateFormat('yyyy-MM-dd').format(session['Date'])
+            : DateFormat('yyyy-MM-dd').format(DateTime.parse(session['Date'])),
       ))
           .toList();
 
+git add
     });
 
     await db.close();
