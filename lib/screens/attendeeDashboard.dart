@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:riseuptracker/database/db_connects.dart';
 import 'package:riseuptracker/screens/personalDetails.dart';
 import 'package:riseuptracker/screens/qrcode/QRScanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
+import 'package:riseuptracker/screens/selectUserType.dart';
 
 class SessionPage extends StatefulWidget {
   @override
@@ -13,40 +13,97 @@ class SessionPage extends StatefulWidget {
 
 class _SessionPageState extends State<SessionPage> {
   bool qrScanned = false;
-  List<Session> sessions = [];
+  bool showUpcomingSessions = true;
+  bool showPastSessions = false;
+  bool showCurrentSessions = false;
+
+  List<Session> attendedSessions = [];
+  List<Session> currentSessions = [];
+  List<Session> upcomingSessions = [];
 
   @override
   void initState() {
     super.initState();
-    fetchSessionsFromDatabase();
+    fetchSessions();
   }
 
-  void fetchSessionsFromDatabase() async {
-    final db = await mongo_dart.Db.create(dbURL);
-    try {
-      await db.open();
-      final collection = db.collection('sessions');
-      final sessionsData = await collection.find().toList();
-      setState(() {
-        sessions = sessionsData
-            .map((data) => Session(
-          id: data['id'],
-          title: data['title'],
-          description: data['description'],
-        ))
-            .toList();
-      });
-    } catch (e) {
-      print('Failed to fetch sessions: $e');
-    } finally {
-      await db.close();
+  Future<String> getUserIdFromSession() async {
+    final db = await mongo_dart.Db.create(dbURl);
+    await db.open();
+
+    final usersCollection = db.collection('Attendee');
+    final user = await usersCollection.findOne(
+      mongo_dart.where.eq('password', '123456'),
+    );
+    await db.close();
+
+    String userId = user?['_id']?.toString() ?? '';
+    print(userId);
+    return userId;
+  }
+
+  Future<void> fetchSessions() async {
+    final db = await mongo_dart.Db.create(dbURl);
+    await db.open();
+
+    final sessionsCollection = db.collection('Session');
+    final sessions = await sessionsCollection.find().toList();
+
+    final userId = await getUserIdFromSession(); // Wait for getUserIdFromSession to complete
+
+    setState(() {
+      final currentDate = DateTime.now();
+
+      attendedSessions = sessions
+          .where((session) => session['_id'] == userId)
+          .map((session) => Session(
+        id: session['_id'].toString(),
+        title: session['Title'],
+      ))
+          .toList();
+
+      currentSessions = sessions
+          .where((session) =>
+      session['Date'].year == currentDate.year &&
+          session['Date'].month == currentDate.month &&
+          session['Date'].day == currentDate.day)
+          .map((session) => Session(
+        id: session['_id'].toString(),
+        title: session['Title'],
+        //sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+      ))
+          .toList();
+
+      upcomingSessions = sessions
+          .where((session) =>
+      session['Date'].year >= currentDate.year &&
+          session['Date'].month >= currentDate.month &&
+          session['Date'].day > currentDate.day)
+          .map((session) => Session(
+        id: session['_id'].toString(),
+        title: session['Title'],
+        //sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+      ))
+          .toList();
+    });
+
+    await db.close();
+  }
+
+
+  List<Session> getFilteredSessions() {
+    if (showUpcomingSessions) {
+      return upcomingSessions;
+    } else if (showPastSessions) {
+      return attendedSessions;
+    } else {
+      return currentSessions;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(""),
         leading: IconButton(
@@ -65,222 +122,222 @@ class _SessionPageState extends State<SessionPage> {
             icon: Icon(Icons.logout),
             onPressed: () {
               // Handle the logout button press
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserTypePage(),
+                ),
+              );
             },
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              SizedBox(height: 25),
-              Align(
+      body: Card(
+        margin: EdgeInsets.all(16),
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Align(
                 alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    'Your Sessions',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Text(
+                  'Your Sessions',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            ],
-          ),
-          SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: sessions.length,
-              itemBuilder: (context, index) {
-                final session = sessions[index];
-                return Card(
-                  elevation: 4,
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                    title: Text(
-                      session.title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: FilterButton(
+                      text: 'Upcoming',
+                      isActive: showUpcomingSessions,
+                      onPressed: () {
+                        setState(() {
+                          showUpcomingSessions = true;
+                          showPastSessions = false;
+                          showCurrentSessions = false;
+                        });
+                      },
                     ),
-                    subtitle: Text(session.description),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (qrScanned) ...[
-                          IconButton(
-                            icon: Icon(Icons.feedback),
-                            onPressed: () {
-                              showFeedbackDialog(session.id);
-                            },
-                          ),
-                        ],
-                        IconButton(
-                          icon: Icon(Icons.qr_code),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => QRScanPage(
-                                  sessionID: session.id,
-                                  onQRScanned: () {
-                                    setState(() {
-                                      qrScanned = true;
-                                    });
-                                    storeAttendance(session.id);
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: FilterButton(
+                      text: 'Past',
+                      isActive: showPastSessions,
+                      onPressed: () {
+                        setState(() {
+                          showUpcomingSessions = false;
+                          showPastSessions = true;
+                          showCurrentSessions = false;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: FilterButton(
+                      text: 'Current',
+                      isActive: showCurrentSessions,
+                      onPressed: () {
+                        setState(() {
+                          showUpcomingSessions = false;
+                          showPastSessions = false;
+                          showCurrentSessions = true;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: getFilteredSessions().length,
+                itemBuilder: (context, index) {
+                  final session = getFilteredSessions()[index];
+                  return buildSessionItem(session);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget buildSessionItem(Session session) {
+    return Card(
+      elevation: 4,
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+        title: Text(
+          session.title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (qrScanned) ...[
+              IconButton(
+                icon: Icon(Icons.feedback),
+                onPressed: () {
+                  // showFeedbackDialog(session.id);
+                },
+              ),
+            ],
+            IconButton(
+              icon: Icon(Icons.qr_code),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QRScanPage(
+                      sessionID: session.id,
+                      onQRScanned: () {
+                        setState(() {
+                          qrScanned = true;
+                        });
+                        storeAttendance(session.id);
+                      },
                     ),
                   ),
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-}
 
-void showFeedbackDialog(BuildContext context, String sessionID) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      String feedback = '';
-      return AlertDialog(
-        title: Text('Provide Feedback'),
-        content: TextField(
-          decoration: InputDecoration(
-            labelText: 'Feedback',
-            border: OutlineInputBorder(),
-          ),
-          maxLines: null,
-          keyboardType: TextInputType.multiline,
-          onChanged: (value) {
-            feedback = value;
-          },
-        ),
-        actions: [
-          TextButton(
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: Text('Submit'),
-            onPressed: () {
-              storeFeedback(sessionID, feedback);
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+  void storeAttendance(String sessionID) async {
+    final db = await mongo_dart.Db.create(dbURl);
+    try {
+      await db.open();
+
+      final user = FirebaseAuth.instance.currentUser;
+      final userId = user?.uid ?? '';
+
+      final attendanceDocument = {
+        'user_id': userId,
+        'session_id': sessionID,
+        'timestamp': DateTime.now(),
+      };
+
+      await db.collection("Attendance").insert(attendanceDocument);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Attendance recorded')),
       );
-    },
-  );
-}
-
-// The rest of the code remains the same
-
-// Store feedback in MongoDB
-/*void storeFeedback(String sessionID, String feedback) async {
-  final db =  await mongo_dart.Db.create(dbURl);
-  try {
-
-    final collection = 'feedback';
-    await db.open();
-
-    final feedbackDocument = {
-      'sessionID': sessionID,
-      'feedback': feedback,
-    };
-
-    await db.collection(collection).insert(feedbackDocument);
-
-    setState(() {
-      sessions.firstWhere((session) => session.id == sessionID).feedback = feedback;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Feedback submitted')),
-    );
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to submit feedback')),
-    );
-  } finally {
-    await db.close();
-  }
-}*/
-
-void storeAttendance(String sessionID) async {
-  final db = await mongo_dart.Db.create(dbURl);
-  try {
-
-    await db.open();
-
-    final user = FirebaseAuth.instance.currentUser;
-    final userId = user?.uid ?? '';
-
-    final attendanceDocument = {
-      'user_id': userId,
-      'session_id': sessionID,
-      'timestamp': DateTime.now(),
-    };
-
-    await db.collection("Attendance").insert(attendanceDocument);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Attendance recorded')),
-    );
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to record attendance')),
-    );
-  } finally {
-    await db.close();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to record attendance')),
+      );
+    } finally {
+      await db.close();
+    }
   }
 }
 
-class SessionDetails {
+class Session {
   final String id;
   final String title;
-  final String description;
 
-  SessionDetails({
+  Session({
     required this.id,
     required this.title,
-    required this.description,
   });
 }
-//
-// final List<Session> sessions = [
-//   Session(
-//     id: '1',
-//     title: 'Session 1',
-//     description: 'Description of session 1',
-//   ),
-//   Session(
-//     id: '2',
-//     title: 'Session 2',
-//     description: 'Description of session 2',
-//   ),
-//   Session(
-//     id: '3',
-//     title: 'Session 3',
-//     description: 'Description of session 3',
-//   ),
-// ];
+
+class FilterButton extends StatelessWidget {
+  final String text;
+  final bool isActive;
+  final VoidCallback onPressed;
+
+  const FilterButton({
+    required this.text,
+    required this.isActive,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          isActive ? Colors.blue : Colors.white,
+        ),
+        foregroundColor: MaterialStateProperty.all<Color>(
+          isActive ? Colors.white : Colors.blue,
+        ),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.blue),
+          ),
+        ),
+      ),
+      child: Text(text),
+    );
+  }
+}
+

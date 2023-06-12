@@ -5,6 +5,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 
 
 import '../database/db_connects.dart';
+import 'attendeeDashboard.dart';
 
 
 class RegistrationForm extends StatefulWidget {
@@ -205,7 +206,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
     'Gender': selectedGender,
     'Phone_no': phoneNumber
     });
-
     await db.close();
     final snackBar = SnackBar(
     content: const Text('Registration successful!'),
