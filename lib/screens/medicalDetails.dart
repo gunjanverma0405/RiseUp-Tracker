@@ -218,12 +218,10 @@ class _MedicalDetailsState extends State<MedicalDetails> {
                 SizedBox(height: 25.0),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SessionPage()));
-                    }
+                    // if (_formKey.currentState!.validate()) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SessionPage()));
+                    // }
                   },
                   child: Text('Submit'),
                 ),

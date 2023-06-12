@@ -39,10 +39,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        "/": (context) => AttendancePage(
-              sessionTitle: 'Save Water',
-            ),
-        //"/": (context) => const splash(),
+        "/": (context) => const splash(),
         MyRoutes.loginRoute: (context) => const AdminLoginPage(),
         MyRoutes.signupRoute: (context) => const RegistrationForm(),
       },
