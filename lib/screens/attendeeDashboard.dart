@@ -63,28 +63,41 @@ class _SessionPageState extends State<SessionPage> {
           .toList();
 
       currentSessions = sessions
-          .where((session) =>
-      session['Date'].year == currentDate.year &&
-          session['Date'].month == currentDate.month &&
-          session['Date'].day == currentDate.day)
+          .where((session) {
+        final sessionDate = session['Date'] is DateTime
+            ? session['Date']
+            : DateTime.parse(session['Date']);
+
+        return sessionDate.year == currentDate.year &&
+            sessionDate.month == currentDate.month &&
+            sessionDate.day == currentDate.day;
+      })
           .map((session) => Session(
         id: session['_id'].toString(),
         title: session['Title'],
-        //sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+        //sessionDate: session['Date'] is DateTime ? session['Date'].toString() : DateFormat('yyyy-MM-dd').format(session['Date']),
       ))
           .toList();
 
       upcomingSessions = sessions
-          .where((session) =>
-      session['Date'].year >= currentDate.year &&
-          session['Date'].month >= currentDate.month &&
-          session['Date'].day > currentDate.day)
+          .where((session) {
+        final sessionDate = session['Date'] is DateTime
+            ? session['Date']
+            : DateTime.parse(session['Date']);
+
+        return sessionDate.year >= currentDate.year &&
+            sessionDate.month >= currentDate.month &&
+            sessionDate.day > currentDate.day;
+      })
           .map((session) => Session(
         id: session['_id'].toString(),
         title: session['Title'],
-        //sessionDate: DateFormat('yyyy-MM-dd').format(session['Date']),
+        //sessionDate: session['Date'] is DateTime ? session['Date'].toString() : DateFormat('yyyy-MM-dd').format(session['Date']),
       ))
           .toList();
+
+
+
     });
 
     await db.close();
@@ -188,7 +201,7 @@ class _SessionPageState extends State<SessionPage> {
                   SizedBox(width: 8),
                   Expanded(
                     child: FilterButton(
-                      text: 'Current',
+                      text: 'Ongoing',
                       isActive: showCurrentSessions,
                       onPressed: () {
                         setState(() {
@@ -216,7 +229,10 @@ class _SessionPageState extends State<SessionPage> {
       ),
     );
   }
+
   Widget buildSessionItem(Session session) {
+    final bool isOngoingSession = currentSessions.contains(session);
+
     return Card(
       elevation: 4,
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -235,7 +251,7 @@ class _SessionPageState extends State<SessionPage> {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (qrScanned) ...[
+            if (isOngoingSession && qrScanned) ...[
               IconButton(
                 icon: Icon(Icons.feedback),
                 onPressed: () {
@@ -243,30 +259,32 @@ class _SessionPageState extends State<SessionPage> {
                 },
               ),
             ],
-            IconButton(
-              icon: Icon(Icons.qr_code),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QRScanPage(
-                      sessionID: session.id,
-                      onQRScanned: () {
-                        setState(() {
-                          qrScanned = true;
-                        });
-                        storeAttendance(session.id);
-                      },
+            if (isOngoingSession)
+              IconButton(
+                icon: Icon(Icons.qr_code),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QRScanPage(
+                        sessionID: session.id,
+                        onQRScanned: () {
+                          setState(() {
+                            qrScanned = true;
+                          });
+                          storeAttendance(session.id);
+                        },
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
           ],
         ),
       ),
     );
   }
+
 
   void storeAttendance(String sessionID) async {
     final db = await mongo_dart.Db.create(dbURl);
@@ -340,4 +358,3 @@ class FilterButton extends StatelessWidget {
     );
   }
 }
-

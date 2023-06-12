@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:riseuptracker/screens/MarkAttendance.dart';
 import '../qrcode/GenerateQRcode.dart';
 
 class OngoingSessionPage extends StatelessWidget {
@@ -6,14 +7,23 @@ class OngoingSessionPage extends StatelessWidget {
   final String sessionDate;
   final String sessionID;
 
-  OngoingSessionPage({required this.sessionTitle, required this.sessionDate, required this.sessionID});
+  OngoingSessionPage(
+      {required this.sessionTitle,
+      required this.sessionDate,
+      required this.sessionID});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Text(''),
+        backgroundColor: Colors.deepPurple,
+        title: Text('Session Attendance'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: Container(
         margin: EdgeInsets.all(20),
@@ -51,11 +61,9 @@ class OngoingSessionPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: Alignment.center,
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle button press
-                  // You can navigate to the attendance page or perform any other action
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -65,12 +73,30 @@ class OngoingSessionPage extends StatelessWidget {
                     ),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blueAccent,
-                  onPrimary: Colors.white,
-                ),
                 child: Text(
-                  'Take Attendance',
+                  'QR Code for Attendance',
+                  style: TextStyle(
+                    fontSize: 20, // Adjust the font size as desired
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AttendancePage(
+                        sessionTitle: sessionTitle,
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Mark Attendance',
                   style: TextStyle(
                     fontSize: 20, // Adjust the font size as desired
                   ),
